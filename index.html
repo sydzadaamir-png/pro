@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your Name – Best Amazon Finds</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap">
+<style>
+:root{
+  box-sizing:border-box;
+  --bg:#9d8fd6; --bar:#8577c4; --card:#fff; --ink:#2a2347; --soft:#e9e5f7; --btn:#fff;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#6f62ad;--bar:#5a4d96;--ink:#241d3d}}
+:root[data-theme="dark"]{--bg:#6f62ad;--bar:#5a4d96;--ink:#241d3d}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+.wrap{max-width:560px;margin:0 auto;padding:20px 14px 40px}
+.top{display:flex;justify-content:flex-end;gap:10px}
+.ib{width:38px;height:38px;border-radius:50%;border:0;background:var(--soft);color:var(--ink);display:grid;place-items:center;cursor:pointer;font-size:17px}
+.ib:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.profile{text-align:center;margin-top:6px}
+.avatar{width:128px;height:128px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:58px;font-weight:800;color:#fff;background:linear-gradient(145deg,#4b3f8f,#b79cf0);border:4px solid #fff;box-shadow:0 6px 18px rgba(30,20,70,.35)}
+h1{margin:0;font-size:28px;font-weight:800;color:#fff}
+.tag{margin:6px 0 14px;font-weight:700;color:#fff}
+.social{display:flex;justify-content:center;gap:18px;margin-bottom:18px}
+.social a{color:#fff;font-weight:800;text-decoration:none;font-size:14px;background:rgba(255,255,255,.2);padding:7px 12px;border-radius:999px}
+hr{border:0;border-top:1px solid rgba(255,255,255,.55);margin:0 0 18px}
+.pill{display:block;width:100%;text-align:center;background:var(--btn);color:var(--ink);font:800 16px/1.2 inherit;font-family:inherit;border:0;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 3px 10px rgba(30,20,70,.2);cursor:pointer}
+.note{background:var(--bar);color:#fff;text-align:center;font-weight:700;font-size:14px;padding:12px;border-radius:12px;margin-bottom:16px}
+.sbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:5;margin:0 0 14px}
+.sbox{display:flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:6px 8px 6px 14px;box-shadow:0 3px 12px rgba(30,20,70,.25);border:2px solid var(--bar)}
+.sbox input{flex:1;min-width:0;border:0;outline:0;background:none;font:700 16px inherit;font-family:inherit;color:var(--ink)}
+.sbox button{border:0;background:var(--soft);color:var(--ink);width:28px;height:28px;border-radius:50%;cursor:pointer;font-weight:800}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.item{display:flex;flex-direction:column;background:var(--card);border-radius:12px;overflow:hidden;text-decoration:none;box-shadow:0 3px 10px rgba(30,20,70,.22)}
+.pic{aspect-ratio:1;display:grid;place-items:center;font-size:64px;background:#fff}
+.lab{background:var(--bar);color:#fff;text-align:center;font-weight:800;font-size:14px;padding:9px 6px;min-height:42px;display:grid;place-items:center}
+.pic img{width:100%;height:100%;object-fit:contain;display:block}
+.item:active{transform:scale(.98)}
+.empty{grid-column:1/-1;text-align:center;color:#fff;font-weight:700;padding:30px 0}
+.fine{color:rgba(255,255,255,.85);font-size:12px;text-align:center;margin-top:28px;line-height:1.5}
+@media (prefers-reduced-motion:reduce){.item:active{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <button class="ib" aria-label="Share" id="share">&#8599;</button>
+  </div>
+
+  <header class="profile" id="head">
+    <div class="avatar" aria-hidden="true">Y</div>
+    <h1>Your Name</h1>
+    <p class="tag">Sharing the best Amazon products</p>
+    <nav class="social" aria-label="Social links">
+      <a href="#" rel="noopener">YouTube</a>
+      <a href="#" rel="noopener">TikTok</a>
+      <a href="#" rel="noopener">Instagram</a>
+    </nav>
+    <hr>
+    <button class="pill" id="jump">&#9660; Search all the products below &#9660;</button>
+    <div class="note">Tap any product to open it on Amazon</div>
+  </header>
+
+  <div class="sbar" id="sbar">
+    <label class="sbox">
+      <span aria-hidden="true">&#128269;</span>
+      <input id="q" type="search" placeholder="Search" autocomplete="off" aria-label="Search products">
+      <button type="button" id="clr" aria-label="Clear search">&#10005;</button>
+    </label>
+  </div>
+
+  <main class="grid" id="grid"></main>
+
+  <p class="fine">As an Amazon Associate I earn from qualifying purchases. Prices and availability are set by Amazon.</p>
+</div>
+
+<script>
+var PRODUCTS = [
+  {name:"Robot Bed Vacuum", img:"images/robot-vacuum.jpg", url:"https://amzn.to/xxxx"},
+  {name:"Chair Condoms", img:"images/chair-condoms.jpg", url:"https://amzn.to/xxxx"},
+  {name:"Microwave Popcorn Maker", img:"images/popcorn-maker.jpg", url:"https://amzn.to/xxxx"}
+  /* Naya product: upar wali line copy karein, comma lagayein, naam/img/url badlein */
+];
+
+var grid=document.getElementById("grid"), q=document.getElementById("q");
+function esc(s){return s.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function render(){
+  var t=q.value.trim().toLowerCase();
+  var list=PRODUCTS.filter(function(p){return p.name.toLowerCase().indexOf(t)>-1});
+  grid.innerHTML=list.length?list.map(function(p){
+    return '<a class="item" href="'+p.url+'" target="_blank" rel="sponsored noopener"><div class="pic"><img src="'+p.img+'" alt="'+esc(p.name)+'" loading="lazy"></div><div class="lab">'+esc(p.name)+'</div></a>';
+  }).join(""):'<div class="empty">No products match. Try another word.</div>';
+}
+q.addEventListener("input",render);
+document.getElementById("clr").onclick=function(){q.value="";render();q.focus()};
+document.getElementById("jump").onclick=function(){document.getElementById("sbar").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});q.focus({preventScroll:true})};
+document.getElementById("share").onclick=function(){
+  try{if(navigator.share){navigator.share({title:document.title,url:location.href})}else{navigator.clipboard.writeText(location.href)}}catch(e){}
+};
+render();
+</script>
+</body>
+</html>
